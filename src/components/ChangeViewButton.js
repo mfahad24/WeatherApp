@@ -9,7 +9,7 @@ class ChangeViewButton extends Component {
           className="weather-app-five-day-button"
           onClick={this.props.action}
         >
-          {/* changes text based on which view is visible, single day/current or
+          {/* changes text based on which view is visible, single day or
           five day; prop sent in from parent */}
           {this.props.view === true
             ? "Change To Five Day Search"
