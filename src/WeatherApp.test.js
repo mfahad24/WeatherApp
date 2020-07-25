@@ -38,9 +38,11 @@ it("queryParam state remains an empty string with user entry of a number", () =>
   expect(wrapper.state().queryParam).toEqual("");
 });
 
-it("queryParam state remains an empty string with user entry of a value containing comma", () => {
+it("queryParam state remains an empty string with user entry of special characters", () => {
   const wrapper = shallow(<WeatherApp />);
   const input = wrapper.find("input");
-  input.simulate("change", { target: { value: "Detroit, MI" } });
+  input.simulate("change", { target: { value: "&Detroit" } });
   expect(wrapper.state().queryParam).toEqual("");
+
+  //only tested one special character, but there are many more
 });

@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import "./WeatherApp.css";
 import ChangeViewButton from "./components/ChangeViewButton";
-
-const apiKey = "b431550be97d0c0f119aaca3f10beb26";
-const baseUrl = "https://api.openweathermap.org/data/2.5/";
-const weatherIconBaseUrl = "http://openweathermap.org/img/wn/";
+import {
+  noNetworkConnection,
+  notAValidCity,
+  enterCityWithoutSpecialCharacters,
+  enter,
+  weather,
+  forecast,
+  apiKey,
+  baseUrl,
+  weatherIconBaseUrl,
+  specialCharacters,
+} from "./constants/weatherConstants.js";
 
 class WeatherApp extends Component {
   constructor() {
@@ -17,73 +25,66 @@ class WeatherApp extends Component {
     };
   }
 
-  handleInputValue = (event) => {
-    //edge case #1 - if user enters number or comma (for state or country), alert them
-    //edge case #2 - empty string is ok, in case user erases input before pressing enter; otherwise outermost alert fires
+  handleSearchInputValue = (event) => {
+    //edge case #1 - if user enters special characters, alert them
     let queryParam = event.target.value;
-
-    if (isNaN(queryParam) || queryParam === "") {
-      if (!queryParam.includes(",")) {
-        this.setState({ queryParam });
-      } else {
-        alert("Please enter a city without commas");
-      }
+    if (
+      (isNaN(queryParam) || queryParam === "") &&
+      !specialCharacters.test(queryParam)
+    ) {
+      this.setState({ queryParam });
     } else {
-      alert("Please enter a city without numbers");
+      alert(enterCityWithoutSpecialCharacters);
     }
   };
 
   handleEnterKeyPress = (event) => {
     //check if user is connected to the internet
-    if (navigator.onLine) {
+    if (!navigator.onLine) {
+      alert(noNetworkConnection);
+    } else {
       //single day weather fetch
       if (
-        event.key === "Enter" &&
+        event.key === enter &&
         this.state.singleDayWeatherViewVisible === true
       ) {
-        fetch(
-          `${baseUrl}weather?q=${this.state.queryParam}&units=imperial&appid=${apiKey}`
-        )
-          .then((response) => {
-            //edge case #3 - checks if queryParam is a valid city; if invalid, API will send 404
-            if (response.ok) {
-              return response.json();
-            } else {
-              alert("Please enter a valid city");
-            }
-          })
-          //second setState entry resets input value after state is updated, thus clearing input field
-          .then((data) =>
-            this.setState({
-              singleDayWeather: data,
-              queryParam: "",
-            })
-          );
+        this.fetchWeather(weather);
         //five day weather fetch
-      } else if (
-        event.key === "Enter" &&
-        this.state.singleDayWeatherViewVisible === false
-      ) {
-        fetch(
-          `${baseUrl}forecast?q=${this.state.queryParam}&units=imperial&appid=${apiKey}`
-        )
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              alert("Please enter a valid city");
-            }
-          })
-          .then((data) =>
-            this.setState({
-              fiveDayWeather: data,
-              queryParam: "",
-            })
-          );
+      } else if (event.key === enter) {
+        this.fetchWeather(forecast);
       }
-    } else {
-      alert("Network disconnected");
     }
+  };
+
+  fetchWeather = (endpoint) => {
+    return fetch(
+      `${baseUrl}${endpoint}?q=${this.state.queryParam}&units=imperial&appid=${apiKey}`
+    )
+      .then((response) => {
+        //edge case #2 - checks if queryParam is a valid city; if invalid, API will send 404
+        if (response.ok) {
+          return response.json();
+        } else if (response.statusText === "Not Found") {
+          //API documentation is not clear in the case that the response returns a 404
+          //I am assuming that the city does not exist
+          alert(notAValidCity);
+        } else {
+          //sending an alert for all other response error codes
+          alert(response.statusText);
+        }
+      })
+      .then(
+        (data) =>
+          endpoint === weather
+            ? this.setState({
+                singleDayWeather: data,
+              })
+            : this.setState({
+                fiveDayWeather: data,
+              }),
+        //resets input value after state is updated, thus clearing input field
+        this.setState({ queryParam: "" })
+      );
   };
 
   changeSingleDayWeatherViewVisibility = () => {
@@ -97,14 +98,13 @@ class WeatherApp extends Component {
 
     return (
       <div className="weather-app-container">
-        <div className="weather-app-current">
-          <div className="weather-app-current-search">
+        <div className="weather-app-single-day">
+          <div className="weather-app-single-day-search">
             <input
               type="text"
-              label="test"
-              className="weather-app-current-search--input"
+              className="weather-app-single-day-search--input"
               placeholder="Type in a city and press enter"
-              onChange={this.handleInputValue}
+              onChange={this.handleSearchInputValue}
               onKeyPress={this.handleEnterKeyPress}
               value={this.state.queryParam}
             ></input>
@@ -121,14 +121,14 @@ class WeatherApp extends Component {
           singleDayWeather.weather &&
           singleDayWeather.main.temp &&
           this.state.singleDayWeatherViewVisible ? (
-            <div className="weather-app-current-result">
-              <div className="weather-app-current-result--city">
+            <div className="weather-app-single-day-result">
+              <div className="weather-app-single-day-result--city">
                 {singleDayWeather.name}
               </div>
-              <div className="weather-app-current-result--condition">
+              <div className="weather-app-single-day-result--condition">
                 {singleDayWeather.weather[0].description}
               </div>
-              <div className="weather-app-current-result--temp">
+              <div className="weather-app-single-day-result--temp">
                 {Math.round(singleDayWeather.main.temp)}°
               </div>
             </div>
@@ -155,7 +155,7 @@ class WeatherApp extends Component {
                     </div>
                     <div className="weather-app-five-day-result-li--icon">
                       <img
-                        className="img"
+                        className="weather-app-five-day-result-li--img"
                         alt={li.weather[0].description}
                         src={`${weatherIconBaseUrl}${li.weather[0].icon}.png`}
                       />
@@ -165,7 +165,6 @@ class WeatherApp extends Component {
                     </div>
                   </li>
                 );
-                // }
               })}
             </div>
           ) : (
