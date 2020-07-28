@@ -8,7 +8,7 @@ export const forecast = "forecast";
 //keyPress constant
 export const enter = "Enter";
 
-//error code constant
+//error code constants
 export const noNetworkConnection = "You are not connnected to the internet";
 export const notAValidCity = "Please enter a valid city";
 export const enterCityWithoutSpecialCharacters =

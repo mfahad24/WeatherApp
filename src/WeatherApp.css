@@ -7,7 +7,7 @@
   padding: 0;
 }
 
-.weather-app-single-day-search--input {
+.weather-app-search--input {
   background-color: rgba(255, 255, 255, 0.6);
   border: none;
   outline: none;
@@ -19,12 +19,11 @@
   text-align: center;
 }
 
-.weather-app-single-day-search {
+.weather-app-search {
   display: flex;
-  justify-content: row;
 }
 
-.weather-app-single-day-search--input:focus {
+.weather-app-search--input:focus {
   background-color: rgba(255, 255, 255, 0.9);
   transition: 0.5s ease;
 }
@@ -52,18 +51,18 @@
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 55%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 .weather-app-single-day-result--city {
   font-size: 65px;
 }
-.weather-app-single-day-result--condition {
+.weather-app-single-day-result--description {
   font-size: 40px;
 }
 
-.weather-app-single-day-result--temp {
+.weather-app-single-day-result--temperature {
   font-size: 125px;
 }
 
@@ -96,7 +95,7 @@
   align-items: center;
 }
 
-.weather-app-five-day-result-title {
+.weather-app-five-day-result--title {
   text-align: center;
   font-size: 30px;
   margin: auto;
@@ -106,4 +105,19 @@
 
 .weather-app-five-day-result-li--temp {
   font-size: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+  .weather-app-search {
+    flex-direction: column;
+  }
+  .weather-app-search--input {
+    font-size: 15px;
+  }
+  .weather-app-search--input::placeholder {
+    color: grey;
+  }
+  .weather-app-single-day-result {
+    top: 60%;
+  }
 }

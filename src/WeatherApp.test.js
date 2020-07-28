@@ -1,8 +1,8 @@
 import React from "react";
-import { configure, shallow } from "enzyme";
+import { configure, shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import WeatherApp from "./WeatherApp";
-import ChangeViewButton from "./components/ChangeViewButton";
+import ChangeViewButton from "./components/ChangeViewButton/ChangeViewButton";
 configure({ adapter: new Adapter() });
 
 it("WeatherApp renders without crashing", () => {
@@ -25,21 +25,21 @@ it("Should initialize this.state.fiveDayWeather to null", () => {
 });
 
 it("WeatherApp state updates after search bar input is changed", () => {
-  const wrapper = shallow(<WeatherApp />);
+  const wrapper = mount(<WeatherApp />);
   const input = wrapper.find("input");
   input.simulate("change", { target: { value: "Detroit" } });
   expect(wrapper.state().queryParam).toEqual("Detroit");
 });
 
 it("queryParam state remains an empty string with user entry of a number", () => {
-  const wrapper = shallow(<WeatherApp />);
+  const wrapper = mount(<WeatherApp />);
   const input = wrapper.find("input");
   input.simulate("change", { target: { value: 23 } });
   expect(wrapper.state().queryParam).toEqual("");
 });
 
 it("queryParam state remains an empty string with user entry of special characters", () => {
-  const wrapper = shallow(<WeatherApp />);
+  const wrapper = mount(<WeatherApp />);
   const input = wrapper.find("input");
   input.simulate("change", { target: { value: "&Detroit" } });
   expect(wrapper.state().queryParam).toEqual("");
