@@ -15,8 +15,8 @@ class ChangeViewButton extends Component {
           {/* changes text based on which view is visible, single day or
           five day; prop sent in from parent */}
           {this.props.singleDayWeatherViewVisible === true
-            ? "Change To Five Day Search"
-            : "Change To Single Day Search"}
+            ? "Five Day Search"
+            : "Single Day Search"}
         </button>
       </div>
     );

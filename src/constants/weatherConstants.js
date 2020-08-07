@@ -1,7 +1,7 @@
 //network request constants
 export const apiKey = "b431550be97d0c0f119aaca3f10beb26";
 export const baseUrl = "https://api.openweathermap.org/data/2.5/";
-export const weatherIconBaseUrl = "http://openweathermap.org/img/wn/";
+export const weatherIconBaseUrl = "https://openweathermap.org/img/wn/";
 export const weather = "weather";
 export const forecast = "forecast";
 

@@ -87,8 +87,12 @@
   justify-content: space-between;
 }
 
-.weather-app-five-day-result-li--date {
+.weather-app-five-day-result-li-date {
   margin-bottom: 15px;
+}
+
+.weather-app-five-day-result-li-date--time {
+  font-size: 17px;
 }
 
 .weather-app-five-day-result-li {
@@ -104,7 +108,24 @@
 }
 
 .weather-app-five-day-result-li--temp {
-  font-size: 30px;
+  font-size: 35px;
+}
+
+.weather-app-five-day-result-li--img[alt] {
+  font-size: 15px;
+}
+
+/* this needs work - not all small devices are 601px when set to landscape */
+@media only screen and (min-device-width: 601px) and (max-device-width: 768px) {
+  .weather-app-single-day-result {
+    top: 70%;
+  }
+  .weather-app-single-day-result--city {
+    font-size: 50px;
+  }
+  .weather-app-single-day-result--temperature {
+    font-size: 100px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -118,6 +139,10 @@
     color: grey;
   }
   .weather-app-single-day-result {
-    top: 60%;
+    top: 65%;
+  }
+  .weather-app-five-day-result-li--img[alt] {
+    /* this size ensures alt text doesnt go out of box */
+    font-size: 12px;
   }
 }

@@ -88,7 +88,9 @@ class WeatherApp extends Component {
           alert(notAValidCity);
         } else {
           //sending an alert for all other response error codes
-          alert(response.statusText);
+          alert(
+            `Please make sure you have entered a value. The error is: ${response.statusText}`
+          );
         }
       })
       .then(

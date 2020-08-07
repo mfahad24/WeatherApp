@@ -12,14 +12,20 @@ class FiveDayWeatherView extends Component {
         !this.props.singleDayWeatherViewVisible ? (
           <div className="weather-app-five-day-result">
             <div className="weather-app-five-day-result--title">
-              Five Day Weather For {fiveDayWeather.city.name},
+              Five Day Weather For {fiveDayWeather.city.name},{" "}
               {fiveDayWeather.city.country}
             </div>
             {fiveDayWeather.list.map((li) => {
               return (
                 <li className="weather-app-five-day-result-li" key={li.dt}>
-                  <div className="weather-app-five-day-result-li--date">
-                    {li.dt_txt}
+                  <div className="weather-app-five-day-result-li-date">
+                    <div className="weather-app-five-day-result-li-date--date">
+                      {li.dt_txt.slice(0, 10)}
+                    </div>
+                    <div className="weather-app-five-day-result-li-date--time">
+                      {" "}
+                      {li.dt_txt.slice(11, 19)}
+                    </div>
                   </div>
                   <div className="weather-app-five-day-result-li--icon">
                     <img
