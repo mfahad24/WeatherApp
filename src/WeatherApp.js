@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import WeatherAppSearch from "./components/WeatherAppSearch/WeatherAppSearch";
+import SingleDayWeather from "./components/SingleDayWeatherView/SingleDayWeatherView";
+import FiveDayWeatherView from "./components/FiveDayWeatherView/FiveDayWeatherView";
 import "./WeatherApp.css";
-import ChangeViewButton from "./components/ChangeViewButton";
 import {
   noNetworkConnection,
   notAValidCity,
@@ -10,7 +12,6 @@ import {
   forecast,
   apiKey,
   baseUrl,
-  weatherIconBaseUrl,
   specialCharacters,
 } from "./constants/weatherConstants.js";
 
@@ -23,6 +24,23 @@ class WeatherApp extends Component {
       fiveDayWeather: null,
       singleDayWeatherViewVisible: true,
     };
+  }
+
+  componentDidMount() {
+    //getting weather location based on user current location immediately after loading of web page
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        fetch(
+          `${baseUrl}weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial&appid=${apiKey}`
+        )
+          .then((response) => response.json())
+          .then((data) =>
+            this.setState({
+              singleDayWeather: data,
+            })
+          );
+      });
+    }
   }
 
   handleSearchInputValue = (event) => {
@@ -70,7 +88,9 @@ class WeatherApp extends Component {
           alert(notAValidCity);
         } else {
           //sending an alert for all other response error codes
-          alert(response.statusText);
+          alert(
+            `Please make sure you have entered a value. The error is: ${response.statusText}`
+          );
         }
       })
       .then(
@@ -94,83 +114,28 @@ class WeatherApp extends Component {
   };
 
   render() {
-    const { singleDayWeather, fiveDayWeather } = this.state;
-
     return (
       <div className="weather-app-container">
-        <div className="weather-app-single-day">
-          <div className="weather-app-single-day-search">
-            <input
-              type="text"
-              className="weather-app-single-day-search--input"
-              placeholder="Type in a city and press enter"
-              onChange={this.handleSearchInputValue}
-              onKeyPress={this.handleEnterKeyPress}
-              value={this.state.queryParam}
-            ></input>
-            <div>
-              <ChangeViewButton
-                action={this.changeSingleDayWeatherViewVisibility}
-                view={this.state.singleDayWeatherViewVisible}
-              ></ChangeViewButton>
-            </div>
-          </div>
+        <WeatherAppSearch
+          handleSearchInputValue={this.handleSearchInputValue}
+          handleEnterKeyPress={this.handleEnterKeyPress}
+          queryParam={this.state.queryParam}
+          changeSingleDayWeatherViewVisibility={
+            this.changeSingleDayWeatherViewVisibility
+          }
+          singleDayWeatherViewVisible={this.state.singleDayWeatherViewVisible}
+          value={this.state.queryParam}
+        ></WeatherAppSearch>
 
-          {/* checks if weather object and necessary nested objects exist, as well as if the single day weather view is visible  */}
-          {singleDayWeather &&
-          singleDayWeather.weather &&
-          singleDayWeather.main.temp &&
-          this.state.singleDayWeatherViewVisible ? (
-            <div className="weather-app-single-day-result">
-              <div className="weather-app-single-day-result--city">
-                {singleDayWeather.name}
-              </div>
-              <div className="weather-app-single-day-result--condition">
-                {singleDayWeather.weather[0].description}
-              </div>
-              <div className="weather-app-single-day-result--temp">
-                {Math.round(singleDayWeather.main.temp)}°
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+        <SingleDayWeather
+          singleDayWeather={this.state.singleDayWeather}
+          singleDayWeatherViewVisible={this.state.singleDayWeatherViewVisible}
+        ></SingleDayWeather>
 
-        <div className="weather-app-five-day">
-          <div className="weather-app-five-day-search"></div>
-          {/* checks if five day weather object and necessary nested objects exist, as well as if the single day weather view is set to false  */}
-          {fiveDayWeather &&
-          fiveDayWeather.list &&
-          !this.state.singleDayWeatherViewVisible ? (
-            <div className="weather-app-five-day-result">
-              <div className="weather-app-five-day-result-title">
-                Five Day Weather For {fiveDayWeather.city.name}
-              </div>
-              {fiveDayWeather.list.map((li) => {
-                return (
-                  <li className="weather-app-five-day-result-li" key={li.dt}>
-                    <div className="weather-app-five-day-result-li--date">
-                      {li.dt_txt}
-                    </div>
-                    <div className="weather-app-five-day-result-li--icon">
-                      <img
-                        className="weather-app-five-day-result-li--img"
-                        alt={li.weather[0].description}
-                        src={`${weatherIconBaseUrl}${li.weather[0].icon}.png`}
-                      />
-                    </div>
-                    <div className="weather-app-five-day-result-li--temp">
-                      {Math.round(li.main.temp_max)} °
-                    </div>
-                  </li>
-                );
-              })}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+        <FiveDayWeatherView
+          fiveDayWeather={this.state.fiveDayWeather}
+          singleDayWeatherViewVisible={this.state.singleDayWeatherViewVisible}
+        ></FiveDayWeatherView>
       </div>
     );
   }

@@ -7,7 +7,7 @@
   padding: 0;
 }
 
-.weather-app-single-day-search--input {
+.weather-app-search--input {
   background-color: rgba(255, 255, 255, 0.6);
   border: none;
   outline: none;
@@ -19,12 +19,11 @@
   text-align: center;
 }
 
-.weather-app-single-day-search {
+.weather-app-search {
   display: flex;
-  justify-content: row;
 }
 
-.weather-app-single-day-search--input:focus {
+.weather-app-search--input:focus {
   background-color: rgba(255, 255, 255, 0.9);
   transition: 0.5s ease;
 }
@@ -52,18 +51,18 @@
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 55%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 .weather-app-single-day-result--city {
   font-size: 65px;
 }
-.weather-app-single-day-result--condition {
+.weather-app-single-day-result--description {
   font-size: 40px;
 }
 
-.weather-app-single-day-result--temp {
+.weather-app-single-day-result--temperature {
   font-size: 125px;
 }
 
@@ -88,15 +87,19 @@
   justify-content: space-between;
 }
 
-.weather-app-five-day-result-li--date {
+.weather-app-five-day-result-li-date {
   margin-bottom: 15px;
+}
+
+.weather-app-five-day-result-li-date--time {
+  font-size: 17px;
 }
 
 .weather-app-five-day-result-li {
   align-items: center;
 }
 
-.weather-app-five-day-result-title {
+.weather-app-five-day-result--title {
   text-align: center;
   font-size: 30px;
   margin: auto;
@@ -105,5 +108,41 @@
 }
 
 .weather-app-five-day-result-li--temp {
-  font-size: 30px;
+  font-size: 35px;
+}
+
+.weather-app-five-day-result-li--img[alt] {
+  font-size: 15px;
+}
+
+/* this needs work - not all small devices are 601px when set to landscape */
+@media only screen and (min-device-width: 601px) and (max-device-width: 768px) {
+  .weather-app-single-day-result {
+    top: 70%;
+  }
+  .weather-app-single-day-result--city {
+    font-size: 50px;
+  }
+  .weather-app-single-day-result--temperature {
+    font-size: 100px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .weather-app-search {
+    flex-direction: column;
+  }
+  .weather-app-search--input {
+    font-size: 15px;
+  }
+  .weather-app-search--input::placeholder {
+    color: grey;
+  }
+  .weather-app-single-day-result {
+    top: 65%;
+  }
+  .weather-app-five-day-result-li--img[alt] {
+    /* this size ensures alt text doesnt go out of box */
+    font-size: 12px;
+  }
 }
