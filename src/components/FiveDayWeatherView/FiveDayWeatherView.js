@@ -2,6 +2,29 @@ import React, { Component } from "react";
 import { weatherIconBaseUrl } from "../../constants/weatherConstants.js";
 
 class FiveDayWeatherView extends Component {
+  convertDate = (currentDate) => {
+    let dateWithoutDashes = currentDate.split("-");
+    let dateInTextForm = new Date(
+      dateWithoutDashes[1],
+      dateWithoutDashes[1] - 1,
+      dateWithoutDashes[2]
+    );
+    return dateInTextForm.toString().slice(0, 10);
+  };
+
+  convertTime = (currentTime) => {
+    if (currentTime.slice(0, 2) < 12) {
+      if (currentTime.slice(0, 2) === "00") {
+        return "12AM";
+      }
+      return currentTime.slice(1, 2) + "AM";
+    } else if (currentTime.slice(0, 2) >= 12) {
+      if (currentTime.slice(0, 2) === "12") {
+        return "12PM";
+      }
+      return currentTime.slice(0, 2) - 12 + "PM";
+    }
+  };
   render() {
     const { fiveDayWeather } = this.props;
     return (
@@ -20,11 +43,11 @@ class FiveDayWeatherView extends Component {
                 <li className="weather-app-five-day-result-li" key={li.dt}>
                   <div className="weather-app-five-day-result-li-date">
                     <div className="weather-app-five-day-result-li-date--date">
-                      {li.dt_txt.slice(0, 10)}
+                      {this.convertDate(li.dt_txt.slice(0, 10))}
                     </div>
                     <div className="weather-app-five-day-result-li-date--time">
                       {" "}
-                      {li.dt_txt.slice(11, 19)}
+                      {this.convertTime(li.dt_txt.slice(11, 16))}
                     </div>
                   </div>
                   <div className="weather-app-five-day-result-li--icon">
@@ -35,7 +58,7 @@ class FiveDayWeatherView extends Component {
                     />
                   </div>
                   <div className="weather-app-five-day-result-li--temp">
-                    {Math.round(li.main.temp_max)} °
+                    {Math.round(li.main.temp_max)}°
                   </div>
                 </li>
               );
