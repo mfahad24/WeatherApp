@@ -20,6 +20,16 @@ class SingleDayWeatherView extends Component {
             <div className="weather-app-single-day-result--temperature">
               {Math.round(singleDayWeather.main.temp)}°
             </div>
+            <div className="weather-app-single-day-result-ranges">
+              <div className="weather-app-single-day-result-ranges--high">
+                {Math.round(singleDayWeather.main.temp_max)}°
+              </div>
+              {"|"}
+              <div className="weather-app-single-day-result-ranges--low">
+                {" "}
+                {Math.round(singleDayWeather.main.temp_min)}°
+              </div>
+            </div>
           </div>
         ) : (
           ""
