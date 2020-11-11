@@ -6,7 +6,7 @@ class SingleDayWeatherView extends Component {
     return (
       <div className="weather-app-single-day">
         {/* checks if weather object and necessary nested objects exist, as well as if the single day weather view is visible  */}
-        {singleDayWeather &&
+        {singleDayWeather && //including this line solves "TypeError: Cannot read property 'list' of null"
         singleDayWeather.weather &&
         singleDayWeather.main.temp &&
         this.props.singleDayWeatherViewVisible ? (

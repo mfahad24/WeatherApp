@@ -30,7 +30,7 @@ class FiveDayWeatherView extends Component {
     return (
       <div className="weather-app-five-day">
         {/* checks if five day weather object and necessary nested objects exist, as well as if the single day weather view is set to false  */}
-        {fiveDayWeather &&
+        {fiveDayWeather && //including this line solves "TypeError: Cannot read property 'list' of null"
         fiveDayWeather.list &&
         !this.props.singleDayWeatherViewVisible ? (
           <div className="weather-app-five-day-result">

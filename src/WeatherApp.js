@@ -13,6 +13,7 @@ import {
   apiKey,
   baseUrl,
   specialCharacters,
+  allOtherErrors,
 } from "./constants/weatherConstants.js";
 
 class WeatherApp extends Component {
@@ -29,6 +30,7 @@ class WeatherApp extends Component {
   componentDidMount() {
     //getting weather location based on user current location immediately after loading of web page
     if (navigator.geolocation) {
+      //if the object exists
       navigator.geolocation.getCurrentPosition((position) => {
         fetch(
           `${baseUrl}weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial&appid=${apiKey}`
@@ -48,7 +50,7 @@ class WeatherApp extends Component {
     let queryParam = event.target.value;
     if (
       (isNaN(queryParam) || queryParam === "") &&
-      !specialCharacters.test(queryParam)
+      !specialCharacters.test(queryParam) //.test checks if user query includes any of the special characters
     ) {
       this.setState({ queryParam });
     } else {
@@ -88,9 +90,7 @@ class WeatherApp extends Component {
           alert(notAValidCity);
         } else {
           //sending an alert for all other response error codes
-          alert(
-            `Please make sure you have entered a value. The error is: ${response.statusText}`
-          );
+          alert(`${allOtherErrors}${response.statusText}`);
         }
       })
       .then(
