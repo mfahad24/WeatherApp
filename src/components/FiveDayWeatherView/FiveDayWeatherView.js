@@ -4,11 +4,7 @@ import { weatherIconBaseUrl } from "../../constants/weatherConstants.js";
 class FiveDayWeatherView extends Component {
   convertDate = (currentDate) => {
     let dateWithoutDashes = currentDate.split("-");
-    let dateInTextForm = new Date(
-      dateWithoutDashes[1],
-      dateWithoutDashes[1] - 1,
-      dateWithoutDashes[2]
-    );
+    let dateInTextForm = new Date(dateWithoutDashes);
     return dateInTextForm.toString().slice(0, 10);
   };
 

@@ -28,7 +28,8 @@ class WeatherApp extends Component {
   }
 
   componentDidMount() {
-    //getting weather location based on user current location immediately after loading of web page
+    console.log(process.env);
+    //getting weather location based on user current location on page load
     if (navigator.geolocation) {
       //if the object exists
       navigator.geolocation.getCurrentPosition((position) => {
@@ -64,10 +65,7 @@ class WeatherApp extends Component {
       alert(noNetworkConnection);
     } else {
       //single day weather fetch
-      if (
-        event.key === enter &&
-        this.state.singleDayWeatherViewVisible === true
-      ) {
+      if (event.key === enter && this.state.singleDayWeatherViewVisible) {
         this.fetchWeather(weather);
         //five day weather fetch
       } else if (event.key === enter) {
@@ -77,12 +75,13 @@ class WeatherApp extends Component {
   };
 
   fetchWeather = (endpoint) => {
-    return fetch(
+    fetch(
       `${baseUrl}${endpoint}?q=${this.state.queryParam}&units=imperial&appid=${apiKey}`
     )
       .then((response) => {
         //edge case #2 - checks if queryParam is a valid city; if invalid, API will send 404
         if (response.ok) {
+          //we're looking for 200 status codes
           return response.json();
         } else if (response.statusText === "Not Found") {
           //API documentation is not clear in the case that the response returns a 404
