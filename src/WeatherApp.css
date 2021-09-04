@@ -33,18 +33,6 @@
   background-size: cover;
   padding: 25px;
   background: #2f80ed; /* fallback for old browsers */
-  /* background: -webkit-linear-gradient(
-    to top,
-    #2f80ed,
-    #56ccf2
-  );  */
-  /* Chrome 10-25, Safari 5.1-6 */
-  /* background: linear-gradient(
-    to top,
-    #2f80ed,
-    #56ccf2 */
-  /* );  */
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .weather-app-single-day-result {
@@ -56,7 +44,9 @@
   top: 55%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  animation: fadeIn 1.5s;
 }
+
 .weather-app-single-day-result--city {
   font-size: 65px;
 }
@@ -70,11 +60,14 @@
 
 .weather-app-five-day-result {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 25px;
+  animation: fadeInUp 1.5s;
 }
 .weather-app-five-day-result-li {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
   border: none;
   outline: none;
   border-radius: 5px;
@@ -87,10 +80,31 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 350px;
+  flex: 1 0 18%; /* The important bit. This percentage decides your columns. 
+  The percent can be px. It just represents your minimum starting width.
+   */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-app-five-day-result-li {
+  flex: 1 0 18%; /* The important bit. This percentage decides your columns. 
+The percent can be px. It just represents your minimum starting width.
+ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .weather-app-five-day-result-li-date {
   margin-bottom: 15px;
+  font-size: 35px;
+}
+
+.weather-app-five-day-result-li--description {
+  font-size: 25px;
 }
 
 .weather-app-five-day-result-li-date--time {
@@ -99,22 +113,24 @@
 
 .weather-app-five-day-result-li {
   align-items: center;
+  cursor: pointer;
 }
 
 .weather-app-five-day-result--title {
   text-align: center;
-  font-size: 30px;
-  margin: auto;
+  font-size: 40px;
+  margin-top: 30px;
   color: white;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 }
 
 .weather-app-five-day-result-li--temp {
-  font-size: 35px;
+  font-size: 55px;
 }
 
 .weather-app-five-day-result-li--img[alt] {
   font-size: 15px;
+  height: 90px;
 }
 
 .weather-app-single-day-result-ranges {
@@ -123,7 +139,32 @@
   font-size: 40px;
 }
 
+/* all keyframes */
+
+@keyframes fadeInUp {
+  from {
+    transform: translate3d(0, 40px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* keyframes end */
+
 /* this needs work - not all small devices are 601px when set to landscape */
+/* what is this device */
 @media only screen and (min-device-width: 601px) and (max-device-width: 768px) {
   .weather-app-single-day-result {
     top: 70%;
@@ -136,6 +177,7 @@
   }
 }
 
+/* what is this device */
 @media only screen and (max-width: 600px) {
   .weather-app-search {
     flex-direction: column;
@@ -152,5 +194,8 @@
   .weather-app-five-day-result-li--img[alt] {
     /* this size ensures alt text doesnt go out of box */
     font-size: 12px;
+  }
+  .weather-app-five-day-result-li {
+    flex: 1 0 50%;
   }
 }

@@ -28,7 +28,6 @@ class WeatherApp extends Component {
   }
 
   componentDidMount() {
-    console.log(process.env);
     //getting weather location based on user current location on page load
     if (navigator.geolocation) {
       //if the object exists
